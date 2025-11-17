@@ -11,7 +11,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Global middleware - runs on every request
+        $middleware->append(\App\Http\Middleware\SetLocale::class);
+
+        // Middleware aliases for use in routes
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'token.valid' => \App\Http\Middleware\CheckTokenValid::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
